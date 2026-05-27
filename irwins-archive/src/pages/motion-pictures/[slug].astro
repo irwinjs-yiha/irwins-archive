@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const films = await getCollection('films');
+  return films.map(film => ({
+    params: { slug: film.slug },
+    props: { film },
+  }));
+}
+
+const { film } = Astro.props;
+const { Content } = await film.render();
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+---
+
+<BaseLayout title={film.data.title} activeNav="motion-pictures">
+  <div class="post-container">
+    <a href="/motion-pictures" class="post-back">← Motion Pictures</a>
+
+    <div class="post-meta">
+      <span>{film.data.year}</span>
+      <span>{formatDate(film.data.date)}</span>
+    </div>
+
+    <h1 class="post-title">{film.data.title}</h1>
+
+    <p class="post-excerpt">{film.data.tagline}</p>
+
+    {film.data.poster && (
+      <img
+        src={film.data.poster}
+        alt={`${film.data.title} poster`}
+        class="post-cover"
+        style="max-width: 280px;"
+        loading="lazy"
+      />
+    )}
+
+    <div class="post-body">
+      <Content />
+    </div>
+  </div>
+</BaseLayout>

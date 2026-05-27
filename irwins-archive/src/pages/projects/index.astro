@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+const sorted = projects.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+}
+---
+
+<BaseLayout title="Projects" activeNav="projects">
+  <div class="section-header" style="padding-top: 52px;">
+    <span class="section-label">Projects</span>
+    <span class="section-count">{sorted.length} {sorted.length === 1 ? 'project' : 'projects'}</span>
+  </div>
+
+  <div class="project-list">
+    {sorted.length === 0 && (
+      <p style="color: var(--text-dim); font-size: 14px; padding: 32px 0; font-family: var(--font-mono);">
+        No projects yet. Add one from /admin.
+      </p>
+    )}
+    {sorted.map(project => (
+      <a href={`/projects/${project.slug}`} class="project-item">
+        <div class="project-header">
+          <span class="project-title">{project.data.title}</span>
+          <span class="project-status">{project.data.status}</span>
+        </div>
+        <p class="project-excerpt">{project.data.excerpt}</p>
+        <div class="project-tags">
+          {project.data.type && <span class="project-tag">{project.data.type}</span>}
+          {project.data.tags?.map(tag => <span class="project-tag">{tag}</span>)}
+        </div>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

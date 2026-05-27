@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map(project => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+}
+---
+
+<BaseLayout title={project.data.title} activeNav="projects">
+  <div class="post-container">
+    <a href="/projects" class="post-back">← Projects</a>
+
+    <div class="post-meta">
+      <span>{project.data.type}</span>
+      <span>{formatDate(project.data.date)}</span>
+      <span>{project.data.status}</span>
+    </div>
+
+    <h1 class="post-title">{project.data.title}</h1>
+
+    <p class="post-excerpt">{project.data.excerpt}</p>
+
+    {project.data.cover && (
+      <img
+        src={project.data.cover}
+        alt={project.data.title}
+        class="post-cover"
+        loading="lazy"
+      />
+    )}
+
+    {project.data.link && (
+      <div style="margin-bottom: 48px;">
+        <a
+          href={project.data.link}
+          target="_blank"
+          rel="noopener"
+          style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-secondary); border-bottom: 0.5px solid var(--border-2); padding-bottom: 3px;"
+        >
+          View Project →
+        </a>
+      </div>
+    )}
+
+    <div class="post-body">
+      <Content />
+    </div>
+  </div>
+</BaseLayout>

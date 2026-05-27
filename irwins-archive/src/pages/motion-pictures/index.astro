@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const films = await getCollection('films');
+const sorted = films.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="Motion Pictures" activeNav="motion-pictures">
+  <div class="section-header" style="padding-top: 52px;">
+    <span class="section-label">Motion Pictures</span>
+    <span class="section-count">{sorted.length} {sorted.length === 1 ? 'reflection' : 'reflections'}</span>
+  </div>
+
+  {sorted.length === 0 && (
+    <p style="color: var(--text-dim); font-size: 14px; padding: 8px 40px 48px; font-family: var(--font-mono);">
+      No films yet. Add one from /admin.
+    </p>
+  )}
+
+  <div class="film-grid">
+    {sorted.map(film => (
+      <a href={`/motion-pictures/${film.slug}`} class="film-card">
+        <div class="film-poster">
+          {film.data.poster
+            ? <img src={film.data.poster} alt={film.data.title} loading="lazy" />
+            : <span class="film-poster-placeholder">{film.data.title}</span>
+          }
+        </div>
+        <div class="film-title">{film.data.title}</div>
+        <div class="film-year">{film.data.year}</div>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

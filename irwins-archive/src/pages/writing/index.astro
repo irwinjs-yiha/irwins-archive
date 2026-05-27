@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('writing');
+const sorted = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+}
+---
+
+<BaseLayout title="Writing" activeNav="writing">
+  <div class="section-header" style="padding-top: 52px;">
+    <span class="section-label">Writing</span>
+    <span class="section-count">{sorted.length} {sorted.length === 1 ? 'entry' : 'entries'}</span>
+  </div>
+
+  <div class="writing-list">
+    {sorted.length === 0 && (
+      <p style="color: var(--text-dim); font-size: 14px; padding: 32px 0; font-family: var(--font-mono);">
+        No posts yet. Add one from /admin.
+      </p>
+    )}
+    {sorted.map((post, i) => (
+      <a href={`/writing/${post.slug}`} class="writing-item">
+        <div class="wi-left">
+          <span class="wi-num">{String(i + 1).padStart(2, '0')}</span>
+          <span class="wi-title">{post.data.title}</span>
+        </div>
+        <span class="wi-tag">{post.data.tags?.[0] ?? 'Essay'}</span>
+        <span class="wi-date">{formatDate(post.data.date)}</span>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

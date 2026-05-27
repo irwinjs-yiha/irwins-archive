@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const writingPosts = await getCollection('writing');
+const filmPosts = await getCollection('films');
+const projectPosts = await getCollection('projects');
+
+// Sort all by date, get most recent
+const sortedWriting = writingPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const sortedFilms = filmPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const sortedProjects = projectPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const featuredWriting = sortedWriting[0];
+const featuredFilm = sortedFilms[0];
+const featuredProject = sortedProjects[0];
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+}
+---
+
+<BaseLayout activeNav="">
+  <section class="hero">
+    <p class="hero-eyebrow">A work-in-progress autobiography</p>
+    <h1 class="hero-title">Where finance meets<br />everything else.</h1>
+    <p class="hero-sub">
+      Writing, motion pictures, and projects by Irwin —
+      M&A analyst, educator, and writer figuring it out in Los Angeles.
+    </p>
+    <a href="/writing" class="hero-cta">Read latest →</a>
+  </section>
+
+  {(featuredWriting || featuredFilm || featuredProject) && (
+    <div>
+      <div class="section-header">
+        <span class="section-label">Recent</span>
+        <span class="section-count">
+          {sortedWriting.length + sortedFilms.length + sortedProjects.length} entries
+        </span>
+      </div>
+
+      <div class="featured-grid">
+        {featuredWriting && (
+          <a href={`/writing/${featuredWriting.slug}`} class="feat-card wide">
+            <div>
+              <div class="card-type">Essay — Writing</div>
+              <div class="card-title">{featuredWriting.data.title}</div>
+              <div class="card-excerpt">{featuredWriting.data.excerpt}</div>
+            </div>
+            <div class="card-meta">
+              {formatDate(featuredWriting.data.date)}
+            </div>
+          </a>
+        )}
+
+        {featuredFilm && (
+          <a href={`/motion-pictures/${featuredFilm.slug}`} class="feat-card">
+            <div>
+              <div class="card-type">Reflection — Motion Pictures</div>
+              <div class="card-title">{featuredFilm.data.title}</div>
+              <div class="card-excerpt">{featuredFilm.data.tagline}</div>
+            </div>
+            <div class="card-meta">{formatDate(featuredFilm.data.date)}</div>
+          </a>
+        )}
+
+        {featuredProject && (
+          <a href={`/projects/${featuredProject.slug}`} class="feat-card">
+            <div>
+              <div class="card-type">Project — {featuredProject.data.type}</div>
+              <div class="card-title">{featuredProject.data.title}</div>
+              <div class="card-excerpt">{featuredProject.data.excerpt}</div>
+            </div>
+            <div class="card-meta">{formatDate(featuredProject.data.date)}</div>
+          </a>
+        )}
+      </div>
+    </div>
+  )}
+</BaseLayout>

@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+---
+
+<BaseLayout title={post.data.title} activeNav="writing">
+  <div class="post-container">
+    <a href="/writing" class="post-back">← Writing</a>
+
+    <div class="post-meta">
+      <span>{formatDate(post.data.date)}</span>
+      {post.data.tags && post.data.tags.map(tag => <span>{tag}</span>)}
+    </div>
+
+    <h1 class="post-title">{post.data.title}</h1>
+
+    {post.data.excerpt && (
+      <p class="post-excerpt">{post.data.excerpt}</p>
+    )}
+
+    {post.data.cover && (
+      <img
+        src={post.data.cover}
+        alt={post.data.title}
+        class="post-cover"
+        loading="lazy"
+      />
+    )}
+
+    <div class="post-body">
+      <Content />
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,55 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "writing"
+    label: "Writing"
+    folder: "src/content/writing"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Excerpt (opening context — tell the story behind the piece)", name: "excerpt", widget: "text" }
+      - { label: "Cover Image", name: "cover", widget: "image", required: false, allow_multiple: false }
+      - { label: "Tags (e.g. Essay, Letter, Reflection, Poetry)", name: "tags", widget: "list", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "films"
+    label: "Motion Pictures"
+    folder: "src/content/films"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Movie Title", name: "title", widget: "string" }
+      - { label: "Year Released", name: "year", widget: "number" }
+      - { label: "Poster Image", name: "poster", widget: "image", required: false, allow_multiple: false }
+      - { label: "One-Line Thought (what the film made you feel or think)", name: "tagline", widget: "string" }
+      - { label: "Date Posted", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Reflection (your full story and opinion)", name: "body", widget: "markdown" }
+
+  - name: "projects"
+    label: "Projects"
+    folder: "src/content/projects"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Project Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Type", name: "type", widget: "select", options: ["Finance", "Valuation", "Equity Research", "Pitch Deck", "Marketing", "Creative", "Other"] }
+      - { label: "Status", name: "status", widget: "select", options: ["Completed", "Ongoing", "WIP"] }
+      - { label: "Cover Image", name: "cover", widget: "image", required: false, allow_multiple: false }
+      - { label: "Context / Story (tell people why this project mattered)", name: "excerpt", widget: "text" }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "Link (optional — deck, doc, or external link)", name: "link", widget: "string", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }

@@ -1,0 +1,94 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  activeNav?: string;
+}
+
+const {
+  title = "Irwin's Archive",
+  description = "A work-in-progress autobiography. Life through my lens — writing, motion pictures, and projects.",
+  activeNav = '',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <meta name="robots" content="index, follow" />
+  <title>{title === "Irwin's Archive" ? title : `${title} — Irwin's Archive`}</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&family=Courier+Prime&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Global styles injected by Astro -->
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-logo">Irwin's Archive</a>
+    <ul class="nav-links">
+      <li><a href="/writing" class={activeNav === 'writing' ? 'active' : ''}>Writing</a></li>
+      <li><a href="/motion-pictures" class={activeNav === 'motion-pictures' ? 'active' : ''}>Motion Pictures</a></li>
+      <li><a href="/projects" class={activeNav === 'projects' ? 'active' : ''}>Projects</a></li>
+      <li><a href="/about" class={activeNav === 'about' ? 'active' : ''}>About</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="footer">
+    <span class="footer-copy">© {new Date().getFullYear()} Irwin's Archive™ — All rights reserved. Do not reproduce without permission.</span>
+    <div class="footer-links">
+      <a href="https://linkedin.com/in/irwinsunarto" class="footer-link" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://instagram.com" class="footer-link" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://substack.com" class="footer-link" target="_blank" rel="noopener">Substack</a>
+    </div>
+  </footer>
+
+  <!-- Anti-copy protection -->
+  <script>
+    // Disable right-click
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Disable keyboard shortcuts for saving, printing, inspecting
+    document.addEventListener('keydown', e => {
+      const key = e.key.toLowerCase();
+      const ctrl = e.ctrlKey || e.metaKey;
+      if (ctrl && ['s', 'u', 'p', 'a'].includes(key)) e.preventDefault();
+      if (ctrl && e.shiftKey && ['i', 'j', 'c'].includes(key)) e.preventDefault();
+      if (e.key === 'F12') e.preventDefault();
+      if (e.key === 'PrintScreen') e.preventDefault();
+    });
+
+    // Disable image drag
+    document.querySelectorAll('img').forEach(img => {
+      img.addEventListener('dragstart', e => e.preventDefault());
+    });
+
+    // Re-apply drag protection on dynamic content
+    const observer = new MutationObserver(() => {
+      document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('dragstart', e => e.preventDefault());
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  </script>
+
+</body>
+</html>
