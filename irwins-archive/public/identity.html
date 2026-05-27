@@ -9,6 +9,7 @@
     body {
       background: #080808;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
@@ -16,18 +17,29 @@
       font-family: sans-serif;
       color: #888;
       font-size: 14px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <p>Setting up your account — a popup should appear...</p>
+  <p>Setting up your account...</p>
   <script>
-    window.addEventListener('load', function () {
-      netlifyIdentity.open();
-      netlifyIdentity.on('login', function () {
-        window.location.href = '/admin/';
-      });
+    // Let widget auto-detect invite/recovery tokens in the URL hash
+    // Only manually open if there's no token present
+    netlifyIdentity.on('login', function() {
+      window.location.href = '/admin/';
     });
+
+    var hash = window.location.hash;
+    var hasToken = hash.includes('invite_token') || hash.includes('recovery_token') || hash.includes('confirmation_token');
+
+    if (!hasToken) {
+      // No token — just show the login form
+      window.addEventListener('load', function() {
+        netlifyIdentity.open();
+      });
+    }
+    // If token present, widget auto-detects it and shows the right form
   </script>
 </body>
 </html>
