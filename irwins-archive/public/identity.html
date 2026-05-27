@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Irwin's Archive — Account Setup</title>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    body {
+      background: #080808;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: sans-serif;
+      color: #888;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <p>Setting up your account — a popup should appear...</p>
+  <script>
+    window.addEventListener('load', function () {
+      netlifyIdentity.open();
+      netlifyIdentity.on('login', function () {
+        window.location.href = '/admin/';
+      });
+    });
+  </script>
+</body>
+</html>
