@@ -6,12 +6,11 @@ const writingPosts = await getCollection('writing');
 const filmPosts = await getCollection('films');
 const projectPosts = await getCollection('projects');
 
-// Sort all by date, get most recent
 const sortedWriting = writingPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const sortedFilms = filmPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const sortedProjects = projectPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const featuredWriting = sortedWriting[0];
+const recentWriting = sortedWriting.slice(0, 2);
 const featuredFilm = sortedFilms[0];
 const featuredProject = sortedProjects[0];
 
@@ -21,61 +20,362 @@ function formatDate(date: Date) {
 ---
 
 <BaseLayout activeNav="">
+
+  <!-- ══ HERO ══ -->
   <section class="hero">
-    <p class="hero-eyebrow">A work-in-progress autobiography</p>
-    <h1 class="hero-title">Where finance meets<br />everything else.</h1>
-    <p class="hero-sub">
-      Writing, motion pictures, and projects by Irwin —
-      M&A analyst, educator, and writer figuring it out in Los Angeles.
-    </p>
-    <a href="/writing" class="hero-cta">Read latest →</a>
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="eyebrow">Jakarta · Los Angeles · Finance</p>
+      <h1 class="hero-title">Irwin's<br/><em>Archive</em></h1>
+      <p class="hero-tagline">Finance, writing, and everything in between.</p>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      <span class="scroll-label">Scroll</span>
+    </div>
   </section>
 
-  {(featuredWriting || featuredFilm || featuredProject) && (
-    <div>
-      <div class="section-header">
-        <span class="section-label">Recent</span>
-        <span class="section-count">
-          {sortedWriting.length + sortedFilms.length + sortedProjects.length} entries
-        </span>
-      </div>
+  <!-- ══ CATEGORY STRIP ══ -->
+  <div class="cat-strip">
+    <a href="/writing" class="cat-link">
+      Writing <span class="cat-count">{sortedWriting.length}</span>
+    </a>
+    <a href="/motion-pictures" class="cat-link">
+      Motion Pictures <span class="cat-count">{sortedFilms.length}</span>
+    </a>
+    <a href="/projects" class="cat-link">
+      Projects <span class="cat-count">{sortedProjects.length}</span>
+    </a>
+  </div>
 
-      <div class="featured-grid">
-        {featuredWriting && (
-          <a href={`/writing/${featuredWriting.slug}`} class="feat-card wide">
-            <div>
-              <div class="card-type">Essay — Writing</div>
-              <div class="card-title">{featuredWriting.data.title}</div>
-              <div class="card-excerpt">{featuredWriting.data.excerpt}</div>
-            </div>
-            <div class="card-meta">
-              {formatDate(featuredWriting.data.date)}
-            </div>
-          </a>
-        )}
+  <!-- ══ CONTENT (light) ══ -->
+  <div class="content-body">
 
-        {featuredFilm && (
-          <a href={`/motion-pictures/${featuredFilm.slug}`} class="feat-card">
-            <div>
-              <div class="card-type">Reflection — Motion Pictures</div>
-              <div class="card-title">{featuredFilm.data.title}</div>
-              <div class="card-excerpt">{featuredFilm.data.tagline}</div>
-            </div>
-            <div class="card-meta">{formatDate(featuredFilm.data.date)}</div>
-          </a>
-        )}
+    <!-- Writing row: featured (wide) + secondary -->
+    {recentWriting.length > 0 && (
+      <section class="grid-section">
+        <div class="section-head">
+          <span class="section-lbl">Writing</span>
+          <a href="/writing" class="section-link">View all →</a>
+        </div>
+        <div class="writing-grid">
+          {recentWriting.map((post, i) => (
+            <a href={`/writing/${post.slug}`} class={`card ${i === 0 ? 'card--featured' : 'card--standard'}`}>
+              <div class="card-media">
+                {post.data.coverImage
+                  ? <img src={post.data.coverImage} alt={post.data.title} loading="lazy" />
+                  : <div class="card-placeholder writing-bg"></div>
+                }
+              </div>
+              <div class="card-body">
+                <span class="card-tag">Essay</span>
+                <h2 class="card-title">{post.data.title}</h2>
+                <span class="card-date">{formatDate(post.data.date)}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
 
-        {featuredProject && (
-          <a href={`/projects/${featuredProject.slug}`} class="feat-card">
-            <div>
-              <div class="card-type">Project — {featuredProject.data.type}</div>
-              <div class="card-title">{featuredProject.data.title}</div>
-              <div class="card-excerpt">{featuredProject.data.excerpt}</div>
-            </div>
-            <div class="card-meta">{formatDate(featuredProject.data.date)}</div>
-          </a>
-        )}
-      </div>
-    </div>
-  )}
+    <!-- Film + Project row -->
+    {(featuredFilm || featuredProject) && (
+      <section class="grid-section">
+        <div class="split-grid">
+          {featuredFilm && (
+            <a href={`/motion-pictures/${featuredFilm.slug}`} class="card card--split">
+              <div class="card-media">
+                {featuredFilm.data.coverImage
+                  ? <img src={featuredFilm.data.coverImage} alt={featuredFilm.data.title} loading="lazy" />
+                  : <div class="card-placeholder film-bg"></div>
+                }
+              </div>
+              <div class="card-body">
+                <span class="card-tag">Motion Pictures</span>
+                <h2 class="card-title">{featuredFilm.data.title}</h2>
+                <span class="card-date">{formatDate(featuredFilm.data.date)}</span>
+              </div>
+            </a>
+          )}
+          {featuredProject && (
+            <a href={`/projects/${featuredProject.slug}`} class="card card--split">
+              <div class="card-media">
+                {featuredProject.data.coverImage
+                  ? <img src={featuredProject.data.coverImage} alt={featuredProject.data.title} loading="lazy" />
+                  : <div class="card-placeholder project-bg"></div>
+                }
+              </div>
+              <div class="card-body">
+                <span class="card-tag">Project — {featuredProject.data.type}</span>
+                <h2 class="card-title">{featuredProject.data.title}</h2>
+                <span class="card-date">{formatDate(featuredProject.data.date)}</span>
+              </div>
+            </a>
+          )}
+        </div>
+      </section>
+    )}
+
+  </div>
+
 </BaseLayout>
+
+<style>
+
+/* ══ HERO ══ */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  /* 🖼 SWAP THIS URL for your own photo later */
+  background: url('https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=2200&q=85')
+    center / cover no-repeat;
+  transform: scale(1.05);
+  transition: transform 10s ease-out;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.78) 0%,
+    rgba(0,0,0,0.18) 55%,
+    transparent 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 4rem 5rem;
+}
+
+.eyebrow {
+  font-size: 0.66rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 0.9rem;
+  font-weight: 400;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(4rem, 9vw, 8.5rem);
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.4rem;
+}
+.hero-title em {
+  font-style: italic;
+  color: rgba(255,255,255,0.38);
+}
+
+.hero-tagline {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.55);
+  font-weight: 300;
+  letter-spacing: 0.03em;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  right: 4rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.4;
+}
+.scroll-line {
+  width: 1px;
+  height: 3rem;
+  background: rgba(255,255,255,0.7);
+  animation: scrollPulse 2.2s ease-in-out infinite;
+}
+.scroll-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: white;
+  writing-mode: vertical-rl;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50%       { opacity: 1;   transform: scaleY(0.6); }
+}
+
+/* ══ CATEGORY STRIP ══ */
+.cat-strip {
+  display: flex;
+  background: #0b0b0b;
+  border-bottom: 1px solid #1c1c1c;
+}
+.cat-link {
+  flex: 1;
+  padding: 1.3rem 2rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+  text-decoration: none;
+  border-right: 1px solid #1c1c1c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  transition: color 0.2s, background 0.2s;
+}
+.cat-link:last-child { border-right: none; }
+.cat-link:hover { color: #fff; background: rgba(255,255,255,0.03); }
+.cat-count {
+  font-size: 0.58rem;
+  color: rgba(255,255,255,0.2);
+}
+
+/* ══ CONTENT BODY ══ */
+.content-body {
+  background: #f7f5f1;
+  padding: 5rem 4rem 7rem;
+}
+
+.grid-section { margin-bottom: 3.5rem; }
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e2ddd7;
+}
+.section-lbl {
+  font-size: 0.63rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #b0a898;
+  font-weight: 500;
+}
+.section-link {
+  font-size: 0.63rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b0a898;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.section-link:hover { color: #111; }
+
+/* ══ CARDS ══ */
+.writing-grid {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 1.5rem;
+}
+.split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Image containers */
+.card-media {
+  overflow: hidden;
+  background: #e8e4dd;
+  margin-bottom: 1.1rem;
+}
+.card--featured .card-media  { height: 440px; }
+.card--standard .card-media  { height: 440px; }
+.card--split    .card-media  { height: 300px; }
+
+.card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.82);
+  transition:
+    transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    filter 0.5s;
+}
+.card:hover .card-media img {
+  transform: scale(1.04);
+  filter: saturate(1.05);
+}
+
+/* Gradient fallbacks (used until you add real cover images) */
+.card-placeholder {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.card:hover .card-placeholder { transform: scale(1.04); }
+
+.writing-bg { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+.film-bg    { background: linear-gradient(135deg, #2c1810 0%, #4a2820 50%, #6b3a2a 100%); }
+.project-bg { background: linear-gradient(135deg, #0d1f0d 0%, #1a3a1a 50%, #2d5228 100%); }
+
+/* Card text */
+.card-body { padding: 0 0.1rem; }
+
+.card-tag {
+  display: block;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #b0a898;
+  margin-bottom: 0.5rem;
+}
+
+.card-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: #111;
+  margin-bottom: 0.5rem;
+  transition: color 0.2s;
+}
+.card--featured .card-title { font-size: 1.6rem; }
+.card:hover .card-title { color: #555; }
+
+.card-date {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c8c0b4;
+}
+
+/* ══ RESPONSIVE ══ */
+@media (max-width: 820px) {
+  .hero-content { padding: 0 2rem 4rem; }
+  .scroll-hint  { right: 2rem; }
+  .content-body { padding: 4rem 2rem 5rem; }
+  .writing-grid { grid-template-columns: 1fr; }
+  .split-grid   { grid-template-columns: 1fr; }
+  .card--featured .card-media,
+  .card--standard .card-media { height: 320px; }
+  .cat-link { font-size: 0.6rem; padding: 1.1rem 1rem; }
+}
+</style>
