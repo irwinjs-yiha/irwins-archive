@@ -35,12 +35,13 @@ const timeline = [
   <section class="hero">
     <div class="hero-inner">
       <h1 class="hero-name">Irwin's<br/><em>Archive</em></h1>
+      <p class="hero-tag">Moments worth keeping.</p>
     </div>
   </section>
 
   <!-- ══ FILM STRIP ══ -->
   <div class="strip-wrap">
-    <div class="strip-label">A work-in-progress autobiography</div>
+    <div class="strip-label">Life moves fast. Memory fades.</div>
     <div class="strip">
       {timeline.map((item) => (
         <div class={`frame ${item.color ? 'frame--color' : ''}`}>
@@ -141,8 +142,17 @@ const timeline = [
   color: #fff;
   line-height: 1.0;
   letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
 }
 .hero-name em { font-style: italic; color: rgba(255,255,255,0.3); }
+
+.hero-tag {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 300;
+}
 
 /* ── FILM STRIP ── */
 .strip-wrap {
