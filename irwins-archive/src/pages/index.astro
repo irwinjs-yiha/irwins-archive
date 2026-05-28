@@ -19,13 +19,13 @@ function formatDate(date: Date) {
 }
 
 const timeline = [
-  { img: '/01_early_childhood_garden_web.jpg',  caption: 'Double Trouble',               color: false, pos: 'center 35%', zoom: '130%' },
-  { img: '/02_2010_aquarium_web.jpg',            caption: 'Aquarium',                     color: false, pos: 'center 20%', zoom: '140%' },
-  { img: '/05_elementary_school_aktor_web.jpg',  caption: 'What do you want to be, kid?', color: false, pos: 'center 18%', zoom: '160%' },
-  { img: '/06_2017_by_the_water_web.jpg',        caption: 'San Francisco',                color: false, pos: 'center 25%', zoom: '140%' },
-  { img: '/07_2019_among_giants_web.jpg',        caption: 'Among Giants',                 color: false, pos: 'center 20%', zoom: '150%' },
-  { img: '/08_2022_last_year_jakarta_web.jpg',   caption: 'Last Year in Jakarta',         color: false, pos: 'center 15%', zoom: '140%' },
-  { img: '/09_2025_still_becoming_web.jpg',      caption: 'Doge',                         color: true,  pos: 'center 18%', zoom: '130%' },
+  { img: '/01_early_childhood_garden_web.jpg',  caption: 'Double Trouble',               color: false, pos: 'center 55%', zoom: 'cover' },
+  { img: '/02_2010_aquarium_web.jpg',            caption: 'Aquarium',                     color: false, pos: 'center 28%', zoom: 'cover' },
+  { img: '/05_elementary_school_aktor_web.jpg',  caption: 'What do you want to be, kid?', color: false, pos: 'center 30%', zoom: 'cover' },
+  { img: '/06_2017_by_the_water_web.jpg',        caption: 'San Francisco',                color: false, pos: 'center 18%', zoom: 'cover' },
+  { img: '/07_2019_among_giants_web.jpg',        caption: 'Among Giants',                 color: false, pos: 'center 30%', zoom: 'cover' },
+  { img: '/08_2022_last_year_jakarta_web.jpg',   caption: 'Last Year in Jakarta',         color: false, pos: 'center 18%', zoom: 'cover' },
+  { img: '/09_2025_still_becoming_web.jpg',      caption: 'Doge',                         color: true,  pos: 'center 12%', zoom: 'cover' },
 ];
 ---
 
@@ -58,11 +58,8 @@ const timeline = [
   <!-- ══ CONTENT ══ -->
   <div class="content-body">
 
-    <nav class="cat-strip">
-      <a href="/writing"         class="cat-link">Writing         <span>{sortedWriting.length}</span></a>
-      <a href="/motion-pictures" class="cat-link">Motion Pictures <span>{sortedFilms.length}</span></a>
-      <a href="/projects"        class="cat-link">Projects        <span>{sortedProjects.length}</span></a>
-    </nav>
+
+
 
     {recentWriting.length > 0 && (
       <section class="grid-section">
@@ -229,22 +226,8 @@ const timeline = [
   color: #111;
 }
 
-.cat-strip {
-  display: flex;
-  background: #111;
-  border-bottom: 1px solid #1c1c1c;
-}
-.cat-link {
-  flex: 1; padding: 1.2rem 2rem;
-  font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(255,255,255,0.35); text-decoration: none;
-  border-right: 1px solid #1c1c1c;
-  display: flex; justify-content: center; align-items: center; gap: 0.6rem;
-  transition: color 0.2s, background 0.2s;
-}
-.cat-link:last-child { border-right: none; }
-.cat-link:hover { color: #fff; background: rgba(255,255,255,0.04); }
-.cat-link span { font-size: 0.55rem; color: rgba(255,255,255,0.18); }
+
+
 
 .grid-section { padding: 5rem 4rem; border-bottom: 1px solid #e2ddd7; }
 
