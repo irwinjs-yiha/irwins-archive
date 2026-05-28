@@ -19,7 +19,7 @@ function formatDate(date: Date) {
 }
 
 const timeline = [
-  { img: '/01_early_childhood_garden_web.jpg',  caption: 'Double Trouble',               color: false, pos: 'center 55%', zoom: '115%'  },
+  { img: '/01_early_childhood_garden_web.jpg',  caption: 'Double Trouble',               color: false, pos: 'center 60%', zoom: '160%'  },
   { img: '/02_2010_aquarium_web.jpg',            caption: 'Aquarium',                     color: false, pos: '32% 35%',    zoom: 'cover' },
   { img: '/05_elementary_school_aktor_web.jpg',  caption: 'What do you want to be, kid?', color: false, pos: 'center 30%', zoom: 'cover' },
   { img: '/06_2017_by_the_water_web.jpg',        caption: 'San Francisco',                color: false, pos: 'center 5%',  zoom: 'cover' },
@@ -198,7 +198,8 @@ const timeline = [
 .frame-img {
   width: 180px;
   height: 240px;
-  
+  background-repeat: no-repeat;
+  background-color: #111;
   background-position: center top;
   filter: grayscale(1) brightness(0.78);
   transition: filter 0.4s, transform 0.4s;
