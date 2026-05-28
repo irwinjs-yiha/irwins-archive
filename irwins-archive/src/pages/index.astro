@@ -19,13 +19,13 @@ function formatDate(date: Date) {
 }
 
 const timeline = [
-  { img: '/01_early_childhood_garden_web.jpg',  yr: 'Childhood', cap: 'Jakarta',          color: false },
-  { img: '/02_2010_aquarium_web.jpg',            yr: '2010',      cap: 'Aquarium',         color: false },
-  { img: '/05_elementary_school_aktor_web.jpg',  yr: 'Aktor',     cap: 'Elementary',       color: false },
-  { img: '/06_2017_by_the_water_web.jpg',        yr: '2017',      cap: 'San Francisco',    color: false },
-  { img: '/07_2019_among_giants_web.jpg',        yr: '2019',      cap: 'Muir Woods',       color: false },
-  { img: '/08_2022_last_year_jakarta_web.jpg',   yr: '2022',      cap: 'Last Year',        color: false },
-  { img: '/09_2025_still_becoming_web.jpg',      yr: '2025',      cap: 'Los Angeles',      color: true  },
+  { img: '/01_early_childhood_garden_web.jpg',  caption: 'Double Trouble',               color: false, pos: 'center 35%', zoom: '130%' },
+  { img: '/02_2010_aquarium_web.jpg',            caption: 'Aquarium',                     color: false, pos: 'center 20%', zoom: '140%' },
+  { img: '/05_elementary_school_aktor_web.jpg',  caption: 'What do you want to be, kid?', color: false, pos: 'center 18%', zoom: '160%' },
+  { img: '/06_2017_by_the_water_web.jpg',        caption: 'San Francisco',                color: false, pos: 'center 25%', zoom: '140%' },
+  { img: '/07_2019_among_giants_web.jpg',        caption: 'Among Giants',                 color: false, pos: 'center 20%', zoom: '150%' },
+  { img: '/08_2022_last_year_jakarta_web.jpg',   caption: 'Last Year in Jakarta',         color: false, pos: 'center 15%', zoom: '140%' },
+  { img: '/09_2025_still_becoming_web.jpg',      caption: 'Doge',                         color: true,  pos: 'center 18%', zoom: '130%' },
 ];
 ---
 
@@ -46,10 +46,9 @@ const timeline = [
     <div class="strip">
       {timeline.map((item) => (
         <div class={`frame ${item.color ? 'frame--color' : ''}`}>
-          <div class="frame-img" style={`background-image:url('${item.img}')`}></div>
+          <div class="frame-img" style={`background-image:url('${item.img}');background-position:${item.pos};background-size:${item.zoom};`}></div>
           <div class="frame-info">
-            <span class="frame-yr">{item.yr}</span>
-            <span class="frame-cap">{item.cap}</span>
+            <span class="frame-caption">{item.caption}</span>
           </div>
         </div>
       ))}
@@ -202,7 +201,7 @@ const timeline = [
 .frame-img {
   width: 180px;
   height: 240px;
-  background-size: cover;
+  
   background-position: center top;
   filter: grayscale(1) brightness(0.78);
   transition: filter 0.4s, transform 0.4s;
@@ -215,22 +214,13 @@ const timeline = [
 .frame--color:hover .frame-img { filter: brightness(1.0); }
 
 .frame-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 0.55rem 0.1rem 0;
+  padding: 0.5rem 0 0;
 }
-.frame-yr {
+.frame-caption {
   font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: rgba(255,255,255,0.6);
-}
-.frame-cap {
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.25);
-  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.03em;
+  font-weight: 300;
 }
 
 /* ── CONTENT ── */
