@@ -2,57 +2,96 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const writingPosts = await getCollection('writing');
-const filmPosts = await getCollection('films');
-const projectPosts = await getCollection('projects');
+const writingPosts  = await getCollection('writing');
+const filmPosts     = await getCollection('films');
+const projectPosts  = await getCollection('projects');
 
-const sortedWriting = writingPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const sortedFilms = filmPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const sortedWriting  = writingPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const sortedFilms    = filmPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const sortedProjects = projectPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const recentWriting = sortedWriting.slice(0, 2);
-const featuredFilm = sortedFilms[0];
+const recentWriting   = sortedWriting.slice(0, 2);
+const featuredFilm    = sortedFilms[0];
 const featuredProject = sortedProjects[0];
 
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
+
+// ── TIMELINE ERAS ─────────────────────────────────────────────
+// Upload your photos to /public/timeline/ in your GitHub repo
+const eras = [
+  { img: '/01_early_childhood_garden_web.jpg',   yr: 'Childhood', cap: 'Jakarta, Indonesia — The Beginning',            num: '01', color: false },
+  { img: '/02_2010_aquarium_web.jpg',            yr: '2010',      cap: 'Aquarium — That serious look says everything',   num: '02', color: false },
+  { img: '/05_elementary_school_aktor_web.jpg',  yr: 'Aktor',     cap: 'Elementary School — The dream, written in chalk', num: '03', color: false },
+  { img: '/06_2017_by_the_water_web.jpg',        yr: '2017',      cap: 'By the Water — First time in America',           num: '04', color: false },
+  { img: '/07_2019_among_giants_web.jpg',        yr: '2019',      cap: 'Among Giants — Muir Woods, California',          num: '05', color: false },
+  { img: '/08_2022_last_year_jakarta_web.jpg',   yr: '2022',      cap: 'Last Year in Jakarta — The farewell',            num: '06', color: false },
+  { img: '/09_2025_still_becoming_web.jpg',      yr: '2025',      cap: 'Still Becoming — Los Angeles',                   num: '07', color: true  },
+];
 ---
 
 <BaseLayout activeNav="">
 
-  <!-- ══ HERO ══ -->
-  <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <p class="eyebrow">Jakarta · Los Angeles · Finance</p>
-      <h1 class="hero-title">Irwin's<br/><em>Archive</em></h1>
-      <p class="hero-tagline">Finance, writing, and everything in between.</p>
+  <!-- ══ SCROLL TIMELINE ══ -->
+  <section id="timeline">
+
+    <div id="tl-panel">
+
+      <div id="tl-bgs">
+        {eras.map((era, i) => (
+          <div
+            id={`tl-bg-${i}`}
+            class={`tl-bg ${i === 0 ? 'active' : ''} ${era.color ? 'color-era' : ''}`}
+            style={`background-image: url('${era.img}');`}
+          />
+        ))}
+      </div>
+
+      <div class="tl-overlay"></div>
+
+      <p class="tl-sitename">Irwin's Archive</p>
+
+      <p class="tl-counter">
+        <span id="tl-num">01</span> / 07
+      </p>
+
+      <div class="tl-text">
+        <div id="tl-yr">{eras[0].yr}</div>
+        <p id="tl-cap">{eras[0].cap}</p>
+      </div>
+
+      <div id="tl-dots">
+        {eras.map((era, i) => (
+          <button class={`tl-dot ${i === 0 ? 'active' : ''}`} data-idx={i} aria-label={`Go to ${era.yr}`} />
+        ))}
+      </div>
+
+      <div id="tl-hint">
+        <div class="hint-line"></div>
+        <span>Scroll</span>
+      </div>
+
+      <div id="tl-color-tag">Full color</div>
     </div>
-    <div class="scroll-hint">
-      <div class="scroll-line"></div>
-      <span class="scroll-label">Scroll</span>
+
+    <div id="tl-sections">
+      {eras.map((_, i) => (
+        <div class="tl-era-section" data-idx={i} />
+      ))}
     </div>
+
   </section>
 
-  <!-- ══ CATEGORY STRIP ══ -->
-  <div class="cat-strip">
-    <a href="/writing" class="cat-link">
-      Writing <span class="cat-count">{sortedWriting.length}</span>
-    </a>
-    <a href="/motion-pictures" class="cat-link">
-      Motion Pictures <span class="cat-count">{sortedFilms.length}</span>
-    </a>
-    <a href="/projects" class="cat-link">
-      Projects <span class="cat-count">{sortedProjects.length}</span>
-    </a>
-  </div>
-
-  <!-- ══ CONTENT (light) ══ -->
+  <!-- ══ CONTENT BODY ══ -->
   <div class="content-body">
 
-    <!-- Writing row: featured (wide) + secondary -->
+    <nav class="cat-strip">
+      <a href="/writing" class="cat-link">Writing <span class="cat-count">{sortedWriting.length}</span></a>
+      <a href="/motion-pictures" class="cat-link">Motion Pictures <span class="cat-count">{sortedFilms.length}</span></a>
+      <a href="/projects" class="cat-link">Projects <span class="cat-count">{sortedProjects.length}</span></a>
+    </nav>
+
     {recentWriting.length > 0 && (
       <section class="grid-section">
         <div class="section-head">
@@ -65,7 +104,7 @@ function formatDate(date: Date) {
               <div class="card-media">
                 {post.data.coverImage
                   ? <img src={post.data.coverImage} alt={post.data.title} loading="lazy" />
-                  : <div class="card-placeholder writing-bg"></div>
+                  : <div class="card-placeholder writing-bg" />
                 }
               </div>
               <div class="card-body">
@@ -79,7 +118,6 @@ function formatDate(date: Date) {
       </section>
     )}
 
-    <!-- Film + Project row -->
     {(featuredFilm || featuredProject) && (
       <section class="grid-section">
         <div class="split-grid">
@@ -88,7 +126,7 @@ function formatDate(date: Date) {
               <div class="card-media">
                 {featuredFilm.data.coverImage
                   ? <img src={featuredFilm.data.coverImage} alt={featuredFilm.data.title} loading="lazy" />
-                  : <div class="card-placeholder film-bg"></div>
+                  : <div class="card-placeholder film-bg" />
                 }
               </div>
               <div class="card-body">
@@ -103,7 +141,7 @@ function formatDate(date: Date) {
               <div class="card-media">
                 {featuredProject.data.coverImage
                   ? <img src={featuredProject.data.coverImage} alt={featuredProject.data.title} loading="lazy" />
-                  : <div class="card-placeholder project-bg"></div>
+                  : <div class="card-placeholder project-bg" />
                 }
               </div>
               <div class="card-body">
@@ -121,261 +159,201 @@ function formatDate(date: Date) {
 
 </BaseLayout>
 
-<style>
+<script>
+  const ERAS = [
+    { yr: 'Childhood', cap: 'Jakarta, Indonesia — The Beginning',           n: '01', color: false },
+    { yr: '2010',      cap: 'Aquarium — That serious look says everything',  n: '02', color: false },
+    { yr: 'Aktor',     cap: 'Elementary School — The dream, written in chalk', n: '03', color: false },
+    { yr: '2017',      cap: 'By the Water — First time in America',          n: '04', color: false },
+    { yr: '2019',      cap: 'Among Giants — Muir Woods, California',         n: '05', color: false },
+    { yr: '2022',      cap: 'Last Year in Jakarta — The farewell',           n: '06', color: false },
+    { yr: '2025',      cap: 'Still Becoming — Los Angeles',                  n: '07', color: true  },
+  ];
 
-/* ══ HERO ══ */
-.hero {
+  let current = 0;
+  const yrEl  = document.getElementById('tl-yr')!;
+  const capEl = document.getElementById('tl-cap')!;
+  const numEl = document.getElementById('tl-num')!;
+  const hint  = document.getElementById('tl-hint')!;
+  const tag   = document.getElementById('tl-color-tag')!;
+  const dots  = document.querySelectorAll<HTMLElement>('.tl-dot');
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const idx = parseInt(dot.dataset.idx!);
+      window.scrollTo({ top: idx * window.innerHeight, behavior: 'smooth' });
+    });
+  });
+
+  function setEra(i: number) {
+    if (i === current) return;
+    document.getElementById(`tl-bg-${current}`)!.classList.remove('active');
+    document.getElementById(`tl-bg-${i}`)!.classList.add('active');
+    current = i;
+
+    yrEl.style.opacity = capEl.style.opacity = numEl.style.opacity = '0';
+    setTimeout(() => {
+      yrEl.textContent  = ERAS[i].yr;
+      capEl.textContent = ERAS[i].cap;
+      numEl.textContent = ERAS[i].n;
+      yrEl.style.opacity = capEl.style.opacity = numEl.style.opacity = '1';
+    }, 300);
+
+    dots.forEach((d, j) => d.classList.toggle('active', j === i));
+    hint.style.opacity = i > 0 ? '0' : '1';
+    tag.classList.toggle('visible', ERAS[i].color);
+  }
+
+  window.addEventListener('scroll', () => {
+    setEra(Math.min(Math.floor(window.scrollY / window.innerHeight), ERAS.length - 1));
+  });
+</script>
+
+<style>
+#timeline {
   position: relative;
+  height: calc(100vh * 7);
+}
+
+#tl-panel {
+  position: sticky;
+  top: 0;
   height: 100vh;
-  min-height: 600px;
-  display: flex;
-  align-items: flex-end;
   overflow: hidden;
 }
 
-.hero-bg {
+#tl-bgs { position: absolute; inset: 0; }
+
+.tl-bg {
   position: absolute;
   inset: 0;
-  /* 🖼 SWAP THIS URL for your own photo later */
-  background: url('https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=2200&q=85')
-    center / cover no-repeat;
-  transform: scale(1.05);
-  transition: transform 10s ease-out;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  filter: grayscale(1) contrast(1.18) brightness(0.6);
+  transform: scale(1.04);
+  transition: opacity 1.1s cubic-bezier(0.4,0,0.2,1), transform 12s ease-out;
+}
+.tl-bg.active { opacity: 1; transform: scale(1.0); }
+.tl-bg.color-era { filter: brightness(0.75) saturate(1.05); }
+
+.tl-overlay {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.12) 55%, transparent 100%);
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0,0,0,0.78) 0%,
-    rgba(0,0,0,0.18) 55%,
-    transparent 100%
-  );
+.tl-sitename {
+  position: absolute; top: 1.6rem; left: 5%; z-index: 3;
+  font-size: 0.6rem; letter-spacing: 0.24em; text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
 }
 
-.hero-content {
-  position: relative;
-  z-index: 2;
-  padding: 0 4rem 5rem;
+.tl-counter {
+  position: absolute; top: 1.6rem; right: 3.5rem; z-index: 3;
+  font-size: 0.6rem; letter-spacing: 0.12em; color: rgba(255,255,255,0.2);
 }
+#tl-num { transition: opacity 0.3s; }
 
-.eyebrow {
-  font-size: 0.66rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.45);
-  margin-bottom: 0.9rem;
-  font-weight: 400;
-}
+.tl-text { position: absolute; bottom: 18%; left: 5%; right: 8%; z-index: 3; }
 
-.hero-title {
+#tl-yr {
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(4rem, 9vw, 8.5rem);
-  font-weight: 400;
-  color: #fff;
-  line-height: 1.0;
-  letter-spacing: -0.02em;
-  margin-bottom: 1.4rem;
-}
-.hero-title em {
-  font-style: italic;
-  color: rgba(255,255,255,0.38);
-}
-
-.hero-tagline {
-  font-size: 0.95rem;
-  color: rgba(255,255,255,0.55);
+  font-size: clamp(72px, 14vw, 160px);
   font-weight: 300;
-  letter-spacing: 0.03em;
+  color: rgba(255,255,255,0.07);
+  line-height: 0.82;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity 0.45s;
+}
+#tl-cap {
+  font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4); margin-top: 0.9rem; transition: opacity 0.45s;
 }
 
-.scroll-hint {
-  position: absolute;
-  bottom: 2.5rem;
-  right: 4rem;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  opacity: 0.4;
+#tl-dots {
+  position: absolute; right: 3.5rem; top: 50%; transform: translateY(-50%);
+  z-index: 3; display: flex; flex-direction: column; gap: 10px;
 }
-.scroll-line {
-  width: 1px;
-  height: 3rem;
-  background: rgba(255,255,255,0.7);
-  animation: scrollPulse 2.2s ease-in-out infinite;
+.tl-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); border: none; cursor: pointer; padding: 0;
+  transition: background 0.3s, transform 0.3s;
 }
-.scroll-label {
-  font-size: 0.58rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: white;
-  writing-mode: vertical-rl;
-}
-@keyframes scrollPulse {
-  0%, 100% { opacity: 0.3; transform: scaleY(1); }
-  50%       { opacity: 1;   transform: scaleY(0.6); }
-}
+.tl-dot.active { background: rgba(255,255,255,0.85); transform: scale(1.9); }
 
-/* ══ CATEGORY STRIP ══ */
-.cat-strip {
-  display: flex;
-  background: #0b0b0b;
-  border-bottom: 1px solid #1c1c1c;
+#tl-hint {
+  position: absolute; bottom: 2.2rem; left: 5%; z-index: 3;
+  display: flex; align-items: center; gap: 0.6rem;
+  opacity: 1; transition: opacity 0.7s; pointer-events: none;
 }
+.hint-line { width: 1px; height: 1.8rem; background: rgba(255,255,255,0.45); }
+#tl-hint span { font-size: 0.55rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+
+#tl-color-tag {
+  position: absolute; top: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 3;
+  font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,200,100,0); border: 1px solid rgba(255,200,100,0);
+  padding: 0.3rem 0.8rem; border-radius: 100px;
+  transition: color 0.9s, border-color 0.9s; pointer-events: none;
+}
+#tl-color-tag.visible { color: rgba(255,200,100,0.7); border-color: rgba(255,200,100,0.28); }
+
+#tl-sections { position: absolute; top: 0; left: 0; width: 100%; pointer-events: none; }
+.tl-era-section { height: 100vh; }
+
+/* ── CONTENT BODY ── */
+.content-body { position: relative; z-index: 2; background: #f7f5f1; color: #111; }
+
+.cat-strip { display: flex; background: #0b0b0b; border-bottom: 1px solid #1c1c1c; }
 .cat-link {
-  flex: 1;
-  padding: 1.3rem 2rem;
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.38);
-  text-decoration: none;
-  border-right: 1px solid #1c1c1c;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.6rem;
-  transition: color 0.2s, background 0.2s;
+  flex: 1; padding: 1.3rem 2rem; font-size: 0.68rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(255,255,255,0.38); text-decoration: none;
+  border-right: 1px solid #1c1c1c; display: flex; justify-content: center;
+  align-items: center; gap: 0.6rem; transition: color 0.2s, background 0.2s;
 }
 .cat-link:last-child { border-right: none; }
 .cat-link:hover { color: #fff; background: rgba(255,255,255,0.03); }
-.cat-count {
-  font-size: 0.58rem;
-  color: rgba(255,255,255,0.2);
-}
+.cat-count { font-size: 0.58rem; color: rgba(255,255,255,0.2); }
 
-/* ══ CONTENT BODY ══ */
-.content-body {
-  background: #f7f5f1;
-  padding: 5rem 4rem 7rem;
-}
-
-.grid-section { margin-bottom: 3.5rem; }
-
-.section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 1rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #e2ddd7;
-}
-.section-lbl {
-  font-size: 0.63rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: #b0a898;
-  font-weight: 500;
-}
-.section-link {
-  font-size: 0.63rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #b0a898;
-  text-decoration: none;
-  transition: color 0.2s;
-}
+.grid-section { padding: 5rem 4rem; border-bottom: 1px solid #e2ddd7; }
+.section-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #e2ddd7; }
+.section-lbl { font-size: 0.63rem; letter-spacing: 0.24em; text-transform: uppercase; color: #b0a898; font-weight: 500; }
+.section-link { font-size: 0.63rem; letter-spacing: 0.14em; text-transform: uppercase; color: #b0a898; text-decoration: none; transition: color 0.2s; }
 .section-link:hover { color: #111; }
 
-/* ══ CARDS ══ */
-.writing-grid {
-  display: grid;
-  grid-template-columns: 1.55fr 1fr;
-  gap: 1.5rem;
-}
-.split-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
+.writing-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 1.5rem; }
+.split-grid   { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
 
-.card {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-}
+.card { display: block; text-decoration: none; color: inherit; }
+.card-media { overflow: hidden; background: #e8e4dd; margin-bottom: 1.1rem; }
+.card--featured .card-media { height: 420px; }
+.card--standard .card-media { height: 420px; }
+.card--split    .card-media { height: 280px; }
+.card-media img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.82); transition: transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.5s; }
+.card:hover .card-media img { transform: scale(1.04); filter: saturate(1.05); }
 
-/* Image containers */
-.card-media {
-  overflow: hidden;
-  background: #e8e4dd;
-  margin-bottom: 1.1rem;
-}
-.card--featured .card-media  { height: 440px; }
-.card--standard .card-media  { height: 440px; }
-.card--split    .card-media  { height: 300px; }
-
-.card-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  filter: saturate(0.82);
-  transition:
-    transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    filter 0.5s;
-}
-.card:hover .card-media img {
-  transform: scale(1.04);
-  filter: saturate(1.05);
-}
-
-/* Gradient fallbacks (used until you add real cover images) */
-.card-placeholder {
-  width: 100%;
-  height: 100%;
-  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
+.card-placeholder { width: 100%; height: 100%; transition: transform 0.8s; }
 .card:hover .card-placeholder { transform: scale(1.04); }
+.writing-bg { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); }
+.film-bg    { background: linear-gradient(135deg, #2c1810 0%, #6b3a2a 100%); }
+.project-bg { background: linear-gradient(135deg, #0d1f0d 0%, #2d5228 100%); }
 
-.writing-bg { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
-.film-bg    { background: linear-gradient(135deg, #2c1810 0%, #4a2820 50%, #6b3a2a 100%); }
-.project-bg { background: linear-gradient(135deg, #0d1f0d 0%, #1a3a1a 50%, #2d5228 100%); }
-
-/* Card text */
-.card-body { padding: 0 0.1rem; }
-
-.card-tag {
-  display: block;
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #b0a898;
-  margin-bottom: 0.5rem;
-}
-
-.card-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 1.25rem;
-  font-weight: 400;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  color: #111;
-  margin-bottom: 0.5rem;
-  transition: color 0.2s;
-}
+.card-body  { padding: 0 0.1rem; }
+.card-tag   { display: block; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: #b0a898; margin-bottom: 0.5rem; }
+.card-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.25rem; font-weight: 400; line-height: 1.3; letter-spacing: -0.01em; color: #111; margin-bottom: 0.5rem; transition: color 0.2s; }
 .card--featured .card-title { font-size: 1.6rem; }
 .card:hover .card-title { color: #555; }
+.card-date { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: #c8c0b4; }
 
-.card-date {
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #c8c0b4;
-}
-
-/* ══ RESPONSIVE ══ */
 @media (max-width: 820px) {
-  .hero-content { padding: 0 2rem 4rem; }
-  .scroll-hint  { right: 2rem; }
-  .content-body { padding: 4rem 2rem 5rem; }
+  .grid-section { padding: 4rem 2rem; }
   .writing-grid { grid-template-columns: 1fr; }
   .split-grid   { grid-template-columns: 1fr; }
-  .card--featured .card-media,
-  .card--standard .card-media { height: 320px; }
-  .cat-link { font-size: 0.6rem; padding: 1.1rem 1rem; }
+  .cat-link     { font-size: 0.6rem; padding: 1.1rem 1rem; }
+  .card--featured .card-media, .card--standard .card-media { height: 300px; }
+  #tl-dots  { right: 1.2rem; }
+  .tl-counter { right: 1.5rem; }
 }
 </style>
