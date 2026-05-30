@@ -43,7 +43,7 @@ const timeline = [
 <div class="strip-wrap">
 
 <div class="strip">
-{[...timeline, ...timeline].map((item) => (
+{[...timeline, ...timeline, ...timeline].map((item) => (
 <div class={`frame ${item.color ? 'frame--color' : ''}`}>
 <div class="frame-img" style={`background-image:url('${item.img}');background-position:${item.pos};background-size:${item.zoom};`}></div>
 <div class="frame-info">
@@ -193,7 +193,7 @@ animation-play-state: paused;
 
 @keyframes marquee {
 0% { transform: translateX(0); }
-100% { transform: translateX(-50%); }
+100% { transform: translateX(-33.3333%); }
 }
 
 .frame {
