@@ -24,7 +24,8 @@ collections:
       - { label: "Body", name: "body", widget: "markdown" }
 
   - name: "films"
-    label: "Motion Pictures"
+    label: "Film & TV"
+    label_singular: "Film"
     folder: "irwins-archive/src/content/films"
     create: true
     slug: "{{slug}}"
