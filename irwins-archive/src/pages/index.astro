@@ -86,7 +86,7 @@ const timeline = [
 <section class="grid-section">
 <div class="split-grid">
 {featuredFilm && (
-<a href={`/motion-pictures/${featuredFilm.slug}`} class="card card--split">
+<a href={`/motion-pictures/${featuredFilm.slug}`} class="card card--film">
 <div class="card-media">
 {featuredFilm.data.poster
 ? <img src={featuredFilm.data.poster} alt={featuredFilm.data.title} loading="lazy"/>
@@ -228,13 +228,21 @@ padding-bottom: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #e2ddd7;
 .section-link:hover { color: #111; }
 
 .writing-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 1.5rem; }
-.split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.split-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 1.5rem; align-items: start; }
 
 .card { display: block; text-decoration: none; color: inherit; }
 .card-media { overflow: hidden; background: #e8e4dd; margin-bottom: 1.1rem; }
 .card--feat .card-media { height: 400px; }
 .card--std .card-media { height: 400px; }
 .card--split .card-media { height: 280px; }
+
+/* Film cards keep the poster's natural 2:3 portrait ratio instead of the
+   landscape crop used by writing/project cards — posters are portrait,
+   so cropping them into a landscape box loses most of the image. */
+.card--film .card-media {
+height: auto;
+aspect-ratio: 2 / 3;
+}
 
 .card-media img {
 width: 100%; height: 100%; object-fit: cover; display: block;
