@@ -2,6 +2,8 @@ backend:
   name: git-gateway
   branch: main
 
+local_backend: true
+
 media_folder: "public/images"
 public_folder: "/images"
 
@@ -29,11 +31,11 @@ collections:
     extension: "md"
     format: "frontmatter"
     fields:
+      - { label: "Search TMDB (type a title, click a poster to autofill)", name: "poster", widget: "tmdb-search", required: false }
       - { label: "Movie Title", name: "title", widget: "string" }
       - { label: "Year Released", name: "year", widget: "number" }
-      - { label: "Poster Image", name: "poster", widget: "image", required: false, allow_multiple: false }
       - { label: "Director", name: "director", widget: "string", required: false }
-      - { label: "Cast", name: "cast", widget: "list", required: false }
+      - { label: "Cast (comma-separated)", name: "cast", widget: "string", required: false }
       - { label: "One-Line Thought (what the film made you feel or think)", name: "tagline", widget: "string" }
       - { label: "Date Posted", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "Reflection (your full story and opinion)", name: "body", widget: "markdown" }

@@ -36,10 +36,10 @@ const { Content } = await film.render();
           </div>
         )}
 
-        {film.data.cast && film.data.cast.length > 0 && (
+        {film.data.cast && (
           <div class="film-info-row">
             <span class="film-info-label">Cast</span>
-            <span class="film-info-value">{film.data.cast.join(', ')}</span>
+            <span class="film-info-value">{film.data.cast}</span>
           </div>
         )}
       </div>

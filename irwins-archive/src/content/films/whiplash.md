@@ -3,7 +3,7 @@ title: "Whiplash"
 year: 2014
 poster: ""
 director: ""
-cast: []
+cast: ""
 tagline: "The movie that made me question whether obsession is the same thing as discipline — and whether I actually want to find out."
 date: 2026-04-01
 ---
