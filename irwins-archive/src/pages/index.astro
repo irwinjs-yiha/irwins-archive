@@ -7,7 +7,7 @@ const filmPosts = await getCollection('films');
 const projectPosts = await getCollection('projects');
 
 const sortedWriting = writingPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const sortedFilms = filmPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const sortedFilms = filmPosts.sort((a, b) => b.data.year - a.data.year || b.data.date.valueOf() - a.data.date.valueOf());
 const sortedProjects = projectPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const recentWriting = sortedWriting.slice(0, 2);
@@ -96,7 +96,7 @@ const timeline = [
 <div class="card-body">
 <span class="card-tag">Film & TV</span>
 <h2 class="card-title">{featuredFilm.data.title}</h2>
-<span class="card-date">{formatDate(featuredFilm.data.date)}</span>
+<span class="card-date">{featuredFilm.data.year}</span>
 </div>
 </a>
 )}

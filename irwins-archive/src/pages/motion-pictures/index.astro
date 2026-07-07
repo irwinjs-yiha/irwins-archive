@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 const films = await getCollection('films');
-const sorted = films.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const sorted = films.sort((a, b) => b.data.year - a.data.year || b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <BaseLayout title="Film & TV" activeNav="motion-pictures">
