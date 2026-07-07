@@ -4,13 +4,13 @@ backend:
 
 local_backend: true
 
-media_folder: "public/images"
+media_folder: "irwins-archive/public/images"
 public_folder: "/images"
 
 collections:
   - name: "writing"
     label: "Writing"
-    folder: "src/content/writing"
+    folder: "irwins-archive/src/content/writing"
     create: true
     slug: "{{slug}}"
     extension: "md"
@@ -25,7 +25,7 @@ collections:
 
   - name: "films"
     label: "Motion Pictures"
-    folder: "src/content/films"
+    folder: "irwins-archive/src/content/films"
     create: true
     slug: "{{slug}}"
     extension: "md"
@@ -42,7 +42,7 @@ collections:
 
   - name: "projects"
     label: "Projects"
-    folder: "src/content/projects"
+    folder: "irwins-archive/src/content/projects"
     create: true
     slug: "{{slug}}"
     extension: "md"

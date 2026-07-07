@@ -1,0 +1,9 @@
+# This file exists only to tell Netlify where the real site lives.
+# The actual site (package.json, netlify.toml, src/, public/...) is
+# nested one level down in irwins-archive/ — a leftover from the
+# original zip upload. Netlify's dashboard "Base directory" setting
+# has been doing this job implicitly; this makes it explicit and
+# version-controlled so it can't silently drift or get lost if the
+# site is ever reconnected/recreated in Netlify.
+[build]
+  base = "irwins-archive"
