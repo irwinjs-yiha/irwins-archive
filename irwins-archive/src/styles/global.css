@@ -33,19 +33,6 @@ line-height: 1.7;
 min-height: 100vh;
 }
 
-/* Prevent image saving */
-img {
-max-width: 100%;
-height: auto;
-display: block;
--webkit-user-drag: none;
--khtml-user-drag: none;
--moz-user-drag: none;
--o-user-drag: none;
-user-drag: none;
-user-select: none;
-}
-
 a {
 color: inherit;
 text-decoration: none;
@@ -120,15 +107,6 @@ color: var(--text-dim);
 font-family: var(--font-mono);
 font-size: 11px;
 color: var(--text-dim);
-}
-
-.card-title {
-font-family: var(--font-serif);
-font-size: 22px;
-font-weight: 500;
-color: var(--text-primary);
-line-height: 1.35;
-margin-bottom: 10px;
 }
 
 /* ─── WRITING LIST ────────────────────────────── */
