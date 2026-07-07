@@ -4,5 +4,5 @@ title: Public Enemies
 year: 2009
 director: Michael Mann
 cast: Johnny Depp, Christian Bale, Marion Cotillard, Jason Clarke, Rory Cochrane
-date: "{{now}}"
+date: 2026-07-07
 ---
