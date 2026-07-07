@@ -12,37 +12,128 @@ export async function getStaticPaths() {
 
 const { film } = Astro.props;
 const { Content } = await film.render();
-
-function formatDate(date: Date) {
-  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-}
 ---
 
 <BaseLayout title={film.data.title} activeNav="motion-pictures">
   <div class="post-container">
     <a href="/motion-pictures" class="post-back">← Motion Pictures</a>
 
-    <div class="post-meta">
-      <span>{film.data.year}</span>
-      <span>{formatDate(film.data.date)}</span>
+    <div class="film-info">
+      <div class="film-info-poster">
+        {film.data.poster
+          ? <img src={film.data.poster} alt={`${film.data.title} poster`} loading="lazy" />
+          : <div class="film-info-poster-placeholder">{film.data.title}</div>
+        }
+      </div>
+      <div class="film-info-meta">
+        <h1 class="post-title">{film.data.title}</h1>
+        <span class="film-info-year">{film.data.year}</span>
+
+        {film.data.director && (
+          <div class="film-info-row">
+            <span class="film-info-label">Director</span>
+            <span class="film-info-value">{film.data.director}</span>
+          </div>
+        )}
+
+        {film.data.cast && film.data.cast.length > 0 && (
+          <div class="film-info-row">
+            <span class="film-info-label">Cast</span>
+            <span class="film-info-value">{film.data.cast.join(', ')}</span>
+          </div>
+        )}
+      </div>
     </div>
-
-    <h1 class="post-title">{film.data.title}</h1>
-
-    <p class="post-excerpt">{film.data.tagline}</p>
-
-    {film.data.poster && (
-      <img
-        src={film.data.poster}
-        alt={`${film.data.title} poster`}
-        class="post-cover"
-        style="max-width: 280px;"
-        loading="lazy"
-      />
-    )}
 
     <div class="post-body">
       <Content />
     </div>
   </div>
 </BaseLayout>
+
+<style>
+.film-info {
+display: flex;
+gap: 40px;
+margin-bottom: 56px;
+}
+
+.film-info-poster {
+flex: 0 0 200px;
+aspect-ratio: 2 / 3;
+overflow: hidden;
+background: var(--bg-3);
+border: 0.5px solid var(--border);
+}
+
+.film-info-poster img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+}
+
+.film-info-poster-placeholder {
+width: 100%;
+height: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 12px;
+text-align: center;
+font-family: var(--font-mono);
+font-size: 11px;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+color: var(--text-dim);
+}
+
+.film-info-meta {
+flex: 1;
+min-width: 0;
+padding-top: 4px;
+}
+
+.film-info-meta .post-title {
+margin-bottom: 8px;
+}
+
+.film-info-year {
+display: block;
+font-family: var(--font-mono);
+font-size: 13px;
+color: var(--text-dim);
+margin-bottom: 24px;
+}
+
+.film-info-row {
+margin-bottom: 14px;
+}
+
+.film-info-label {
+display: block;
+font-family: var(--font-mono);
+font-size: 10px;
+letter-spacing: 0.14em;
+text-transform: uppercase;
+color: var(--text-dim);
+margin-bottom: 4px;
+}
+
+.film-info-value {
+font-size: 14px;
+color: var(--text-secondary);
+line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+.film-info {
+flex-direction: column;
+gap: 20px;
+}
+.film-info-poster {
+flex: 0 0 auto;
+width: 160px;
+}
+}
+</style>

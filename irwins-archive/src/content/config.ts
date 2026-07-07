@@ -17,6 +17,8 @@ const films = defineCollection({
     title: z.string(),
     year: z.number(),
     poster: z.string().optional(),
+    director: z.string().optional(),
+    cast: z.array(z.string()).optional().default([]),
     tagline: z.string(),
     date: z.coerce.date(),
   }),
