@@ -12,6 +12,7 @@ export async function getStaticPaths() {
 
 const { film } = Astro.props;
 const { Content } = await film.render();
+const hasReflection = film.body.trim().length > 0;
 ---
 
 <BaseLayout title={film.data.title} activeNav="motion-pictures">
@@ -45,9 +46,11 @@ const { Content } = await film.render();
       </div>
     </div>
 
-    <div class="post-body">
-      <Content />
-    </div>
+    {hasReflection && (
+      <div class="post-body">
+        <Content />
+      </div>
+    )}
   </div>
 </BaseLayout>
 

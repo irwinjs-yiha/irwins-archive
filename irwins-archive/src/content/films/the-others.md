@@ -5,7 +5,6 @@ year: 2001
 director: Alejandro Amenábar
 cast: Nicole Kidman, Alakina Mann, James Bentley, Fionnula Flanagan, Christopher
   Eccleston
-tagline: confused at first
 date: 2026-07-07
 ---
 decent

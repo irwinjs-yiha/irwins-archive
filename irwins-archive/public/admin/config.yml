@@ -37,9 +37,8 @@ collections:
       - { label: "Year Released", name: "year", widget: "number" }
       - { label: "Director", name: "director", widget: "string", required: false }
       - { label: "Cast (comma-separated)", name: "cast", widget: "string", required: false }
-      - { label: "One-Line Thought (what the film made you feel or think)", name: "tagline", widget: "string" }
       - { label: "Date Posted", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
-      - { label: "Reflection (your full story and opinion)", name: "body", widget: "markdown" }
+      - { label: "Reflection (your full story and opinion)", name: "body", widget: "markdown", required: false }
 
   - name: "projects"
     label: "Projects"
