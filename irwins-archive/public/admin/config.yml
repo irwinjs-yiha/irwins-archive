@@ -37,7 +37,7 @@ collections:
       - { label: "Year Released", name: "year", widget: "number" }
       - { label: "Director", name: "director", widget: "string", required: false }
       - { label: "Cast (comma-separated)", name: "cast", widget: "string", required: false }
-      - { name: "date", widget: "hidden", default: "{{now}}" }
+      - { name: "date", widget: "auto-date", required: false }
       - { label: "Reflection (your full story and opinion)", name: "body", widget: "markdown", required: false }
 
   - name: "projects"

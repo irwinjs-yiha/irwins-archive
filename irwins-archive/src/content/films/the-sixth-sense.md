@@ -4,5 +4,5 @@ title: The Sixth Sense
 year: 1999
 director: M. Night Shyamalan
 cast: Bruce Willis, Haley Joel Osment, Toni Collette, Olivia Williams, Trevor Morgan
-date: "{{now}}"
+date: 2026-07-07
 ---
